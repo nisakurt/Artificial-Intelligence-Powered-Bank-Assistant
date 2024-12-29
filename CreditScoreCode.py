@@ -5,24 +5,24 @@ Created on Fri Dec 13 16:13:10 2024
 @author: Nisa
 """
 
-def calculate_credit_score(income, num_houses, num_cars, num_lands, debt, work_years, education, marital_status):
+def kredi_notu_hesapla(gelir, ev_sayisi, araba_sayisi, arsa_sayisi, borc, calisma_yili, egitim, medeni_durum):
     # Income Level Score
-    if income < 10000:
-        income_score = 500
-    elif 10000 <= income < 20000:
-        income_score = 1000
-    elif 20000 <= income < 40000:
-        income_score = 2000
-    elif 40000 <= income < 60000:
-        income_score = 3000
+    if gelir < 10000:
+        gelir_puan = 500
+    elif 10000 <= gelir < 20000:
+        gelir_puan = 1000
+    elif 20000 <= gelir < 40000:
+        gelir_puan = 2000
+    elif 40000 <= gelir < 60000:
+        gelir_puan = 3000
     else:
-        income_score = 4000
+        gelir_puan = 4000
     
     # Number of Houses Score
-    house_score = min(num_houses * 100, 300)  # 100 points per house, maximum 300 points
+    ev_puan = min(ev_sayisi * 100, 300)  # 100 points per house, maximum 300 points
 
     # Number of Cars Score
-    car_score = min(num_cars * 60, 180)  # 60 points per car, maximum 180 points
+    araba_puan = min(araba_sayisi * 60, 180)   # 60 points per car, maximum 180 points
 
     # Number of Lands Score
     land_score = min(num_lands * 80, 240)  # 80 points per land, maximum 240 points
@@ -38,21 +38,50 @@ def calculate_credit_score(income, num_houses, num_cars, num_lands, debt, work_y
         debt_score = 50
 
     # Work Experience Score
-    if work_years <= 5:
-        work_score = 500
-    elif 6 <= work_years <= 10:
-        work_score = 1000
-    elif 11 <= work_years <= 20:
-        work_score = 2000
+     if calisma_yili <= 5:
+        calisma_puan = 500
+    elif 6 <= calisma_yili <= 10:
+        calisma_puan = 1000
+    elif 11 <= calisma_yili <= 20:
+        calisma_puan = 2000
     else:
-        work_score = 3000
+        calisma_puan = 3000
 
     # Education Level Score
-    education_score = {
-        "Middle School Graduate": 50,
-        "High School Graduate": 100,
-        "University": 150,
-        "Master's": 200,
-        "Doctorate": 250
-    }.get
+   egitim_puan = {
+        "Ortaokul Mezunu": 50,
+        "Lise Mezunu": 100,
+        "Üniversite": 150,
+        "Yüksek Lisans": 200,
+        "Doktora": 250
+    }.get(egitim, 0)
 
+# Marital Status Score
+medeni_puan = 100 if medeni_durum == "Evli" else 50
+
+# Credit Score Calculation
+kredi_notu = (
+        (gelir_puan * 0.3) +
+        ((ev_puan + araba_puan + arsa_puan) * 0.15) +  # Toplam varlık puanı
+        (borc_puan * 0.15) +
+        (calisma_puan * 0.2) +
+        (egitim_puan * 0.1) +
+        (medeni_puan * 0.1)
+    )
+    return round(kredi_notu)
+
+# Get user input
+gelir = float(input("Aylık Gelir Düzeyinizi Girin (Örneğin: 54000): "))
+ev_sayisi = int(input("Sahip Olduğunuz Ev Sayısını Girin (Örneğin: 1): "))
+araba_sayisi = int(input("Sahip Olduğunuz Araba Sayısını Girin (Örneğin: 1): "))
+arsa_sayisi = int(input("Sahip Olduğunuz Arsa Sayısını Girin (Örneğin: 0): "))
+borc = float(input("Mevcut Borç Miktarınızı Girin (Örneğin: 7000): "))
+calisma_yili = int(input("Toplam Çalışma Sürenizi Girin (Yıl olarak, Örneğin: 3): "))
+egitim = input("Eğitim Düzeyinizi Girin (Ortaokul Mezunu, Lise Mezunu, Üniversite, Yüksek Lisans, Doktora): ").capitalize()
+medeni_durum = input("Medeni Durumunuzu Girin (Evli veya Bekar): ").capitalize()
+
+# Calculate credit score
+kredi_notu = kredi_notu_hesapla(gelir, ev_sayisi, araba_sayisi, arsa_sayisi, borc, calisma_yili, egitim, medeni_durum)
+
+# Display the result
+print(f"Hesaplanan Kredi Notunuz: {kredi_notu}")
